@@ -6,11 +6,35 @@
 <title>core3d</title>
 <style>
   html, body { margin: 0; height: 100%; background: #000; }
-  body { display: flex; align-items: center; justify-content: center; }
-  img { max-width: 100vw; max-height: 100vh; width: auto; height: auto; object-fit: contain; }
+  body { display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  video { max-width: 100vw; max-height: 100vh; width: auto; height: auto; object-fit: contain; cursor: pointer; display: block; }
+  #btn {
+    position: fixed; right: 16px; bottom: 16px;
+    width: 44px; height: 44px; border: 0; border-radius: 50%;
+    background: rgba(255,255,255,0.15); color: #fff; font-size: 18px; line-height: 44px;
+    cursor: pointer; opacity: 0.6; transition: opacity 0.2s;
+  }
+  #btn:hover { opacity: 1; }
 </style>
 </head>
 <body>
-<img src="core3d.gif" alt="core3d simulation">
+<video id="v" src="core3d.mp4" autoplay loop muted playsinline></video>
+<button id="btn" aria-label="Pause">❚❚</button>
+<script>
+  const v = document.getElementById('v');
+  const btn = document.getElementById('btn');
+  function toggle() { v.paused ? v.play() : v.pause(); }
+  function sync() {
+    btn.textContent = v.paused ? '▶' : '❚❚';
+    btn.setAttribute('aria-label', v.paused ? 'Play' : 'Pause');
+  }
+  v.addEventListener('click', toggle);
+  btn.addEventListener('click', toggle);
+  v.addEventListener('play', sync);
+  v.addEventListener('pause', sync);
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space') { e.preventDefault(); toggle(); }
+  });
+</script>
 </body>
 </html>
